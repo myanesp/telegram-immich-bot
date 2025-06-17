@@ -20,6 +20,14 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 IMMICH_API_URL = os.getenv("IMMICH_API_URL", "http://your-immich-instance.ltd/api")
 IMMICH_API_KEY = os.getenv("IMMICH_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+ALLOWED_USER_IDS = os.getenv("ALLOWED_USER_IDS", "")
+ALLOWED_USER_IDS = [int(user_id.strip()) for user_id in ALLOWED_USER_IDS.split(",") if user_id.strip()] if ALLOWED_USER_IDS else []
+
+def is_user_allowed(user_id):
+    """Check if a user is allowed to upload files. If not set, all users can upload files"""
+    if not ALLOWED_USER_IDS:
+        return True
+    return user_id in ALLOWED_USER_IDS
 
 def format_iso_date(dt):
     """Format datetime as ISO 8601 with Z timezone."""
@@ -59,6 +67,11 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle document uploads to Immich."""
     try:
         if not update.message or not update.message.document:
+            return
+
+        user_id = update.message.from_user.id
+        if not is_user_allowed(user_id):
+            await update.message.reply_text("❌ You are not authorized to use this bot.")
             return
 
         document = update.message.document
