@@ -20,7 +20,7 @@ RUN apk add --no-cache --virtual .build-deps \
     ffmpeg \
     && pip install --no-cache-dir --upgrade pip
 
-COPY . /app
+COPY app/ /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
