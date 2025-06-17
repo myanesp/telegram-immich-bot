@@ -76,6 +76,7 @@ docker run -d \
 
 ## Planned features
 
+- [ ] Upload videos
 - [ ] Multiarch support
 - [ ] Multilingual support
 - [ ] Reduce Docker image size
