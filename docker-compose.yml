@@ -1,0 +1,10 @@
+---
+services:
+  telegram-immich-bot:
+    container_name: telegram-immich-bot
+    environment:
+      - IMMICH_API_URL=https://immich.tld/api
+      - IMMICH_API_KEY=xxxxxxxxxx
+      - TELEGRAM_BOT_TOKEN=xxx:xxxxxxxxxxx
+      - ALLOWED_USER_IDS=xxxxxx
+    image: ghcr.io/myanesp/telegram-immich-bot
