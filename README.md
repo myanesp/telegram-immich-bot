@@ -34,7 +34,7 @@ This Docker container provides a simple way to automatically upload files from T
    - Generate an API key from your Immich settings
 
 3. **Run the container and send a file!**
-This image is available both on [Docker Hub](https://hub.docker.com/r/myanesp/telegram-immich-bot) and [GitHub Container Registry](https://github.com/myanesp/ovh-ip-updater), so you're free to choose from which one you're going to download the image. Edit the following docker compose/docker run command to match your needs and you are ready to go!
+This image is available both on [Docker Hub](https://hub.docker.com/r/myanesp/telegram-immich-bot) and [GitHub Container Registry](https://github.com/myanesp/telegram-immich-bot), so you're free to choose from which one you're going to download the image. Edit the following docker compose/docker run command to match your needs and you are ready to go!
 
 ### Run with Docker Compose
 
