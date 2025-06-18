@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.description="Telegram bot to upload files directl
 LABEL org.opencontainers.image.authors="Mario Yanes <mario.yanes@uc3m.es> (@myanesp)"
 LABEL org.opencontainers.image.url=https://github.com/myanesp/telegram-immich-bot/blob/main/README.md
 LABEL org.opencontainers.image.documentation=https://github.com/myanesp/telegram-immich-bot
-LABEL org.opencontainers.image.source = "https://github.com/myanesp/telegram-immich-bot"
+LABEL org.opencontainers.image.source="https://github.com/myanesp/telegram-immich-bot"
 LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
 
 WORKDIR /app
