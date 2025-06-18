@@ -7,4 +7,5 @@ services:
       - IMMICH_API_KEY=xxxxxxxxxx
       - TELEGRAM_BOT_TOKEN=xxx:xxxxxxxxxxx
       - ALLOWED_USER_IDS=xxxxxx
+      - TZ=Europe/Madrid
     image: ghcr.io/myanesp/telegram-immich-bot
