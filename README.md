@@ -11,16 +11,16 @@
 
 This Docker container provides a simple way to automatically upload files from Telegram to your Immich photo management system. It's perfect for:
 
+- Images and photos sent without compression that your relatives send you via Telegram
 - Automatically backing up photos/videos sent to a Telegram bot
 - Creating a simple upload pipeline for your personal media
-- Integrating Telegram with your self-hosted photo management system
 
 ## Features
 
-✅ Automatic file uploads from Telegram to Immich
-✅ Preserves original file metadata (for images)
-✅ User restriction control (only allow specific Telegram user IDs)
-✅ Simple configuration via environment variables
+- ✅ Automatic file uploads from Telegram to Immich
+- ✅ Preserves original file metadata (for images)
+- ✅ User restriction control (only allow specific Telegram user IDs)
+- ✅ Simple configuration via environment variables
 
 ## How to Run
 
@@ -75,6 +75,7 @@ docker run -d \
 
 ## Planned features
 
+- [ ] Upload videos
 - [ ] Multiarch support
 - [ ] Multilingual support
 - [ ] Reduce Docker image size
