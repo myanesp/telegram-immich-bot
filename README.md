@@ -34,12 +34,11 @@ This Docker container provides a simple way to automatically upload files from T
    - Generate an API key from your Immich settings
 
 3. **Run the container and send a file!**
-This image is available both on [Docker Hub](https://hub.docker.com/r/myanesp/telegram-immich-bot) and [GitHub Container Registry](https://github.com/myanesp/ovh-ip-updater), so you're free to choose from which one you're going to download the image. Edit the following docker compose/docker run command to match your needs and you are ready to go!
+This image is available both on [Docker Hub](https://hub.docker.com/r/myanesp/telegram-immich-bot) and [GitHub Container Registry](https://github.com/myanesp/telegram-immich-bot), so you're free to choose from which one you're going to download the image. Edit the following docker compose/docker run command to match your needs and you are ready to go!
 
 ### Run with Docker Compose
 
 ```yaml
-version: '3'
 services:
   telegram-immich-bot:
     image: ghcr.io/myanesp/telegram-immich-bot:latest # or myanesp/telegram-immich-bot
@@ -47,9 +46,10 @@ services:
     restart: unless-stopped
     environment:
       - TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-      - IMMICH_API_URL=http://your-immich-instance/api
+      - IMMICH_API_URL=https://your-immich-instance.tld/api
       - IMMICH_API_KEY=your_immich_api_key
-      - ALLOWED_USER_IDS=user1_id,user2_id # Optional: restrict to specific users
+      - ALLOWED_USER_IDS=user1_id,user2_id
+      - TZ=Europe/Madrid
 ```
 ### Run with Docker run
 
@@ -60,7 +60,7 @@ docker run -d \
   -e TELEGRAM_BOT_TOKEN=your_telegram_bot_token \
   -e IMMICH_API_URL=http://your-immich-instance/api \
   -e IMMICH_API_KEY=your_immich_api_key \
-  -e ALLOWED_USER_IDS=user1_id,user2_id \ # Optional
+  -e ALLOWED_USER_IDS=user1_id,user2_id \ 
   ghcr.io/myanesp/telegram-immich-bot:latest # or myanesp/telegram-immich-bot
 ```
 
@@ -71,8 +71,7 @@ docker run -d \
 | TELEGRAM_BOT_TOKEN | ✅ | Your Telegram bot token obtained from @BotFather | - |
 | IMMICH_API_URL | ✅ | Full URL to your Immich API endpoint (can be local or public) (e.g., `http://your-immich-instance:2283/api`) | - |
 | IMMICH_API_KEY | ✅ | API key for authenticating with your Immich instance | - |
-| ALLOWED_USER_IDS | ❌ | Comma-separated list of Telegram user IDs allowed to use the bot (e.g., `123456789,987654321`) | (empty - all users allowed) |
-
+| ALLOWED_USER_IDS | ✅ | Comma-separated list of Telegram user IDs allowed to use the bot (e.g., `123456789,987654321`) | - |
 
 ## Planned features
 
