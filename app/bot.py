@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 BOT_NAME = "Telegram to Immich Bot"
-BOT_VERSION = "v0.5"
+BOT_VERSION = "0.6"
 
 def validate_config():
     """Validate required environment variables."""
@@ -156,7 +156,7 @@ async def send_startup_message(application: Application):
     immich_status, user_info = await get_immich_status()
 
     startup_message = (
-        f"🤖 {BOT_NAME} v{BOT_VERSION} has started!\n"
+        f"🤖 {BOT_NAME} v{BOT_VERSION} has started!\n\n"
         f"{immich_status}\n"
         f"Logged in as {user_info}\n\n"
         "Bot is ready to receive your files."
