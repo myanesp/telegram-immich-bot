@@ -18,7 +18,7 @@ This Docker container provides a simple way to automatically upload files from T
 ## Features
 
 - ✅ Automatic file uploads from Telegram to Immich
-- ✅ Preserves original file metadata (for images)
+- ✅ Preserves original file metadata (for images sent as Documents)
 - ✅ User restriction control (only allow specific Telegram user IDs)
 - ✅ Simple configuration via environment variables
 
@@ -34,7 +34,7 @@ This Docker container provides a simple way to automatically upload files from T
    - Generate an API key from your Immich settings
 
 3. **Run the container and send a file!**
-This image is available both on [Docker Hub](https://hub.docker.com/r/myanesp/telegram-immich-bot) and [GitHub Container Registry](https://github.com/myanesp/telegram-immich-bot), so you're free to choose from which one you're going to download the image. Edit the following docker compose/docker run command to match your needs and you are ready to go!
+This image is available both on [Docker Hub](https://hub.docker.com/r/myanesp/telegram-immich-bot) and [GitHub Container Registry](https://github.com/myanesp/telegram-immich-bot), so you're free to choose from which one you're going to download the image. Edit the following docker compose/docker run command to match your needs and you are ready to go! Remember to send the image(s) as File/Documents and not as Picture to preserve all metadata.
 
 ### Run with Docker Compose
 
