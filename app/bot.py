@@ -195,7 +195,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Alias for help command."""
     await help_command(update, context)
 
-
 async def version(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send the bot version when the command /version is issued."""
     await update.message.reply_text(f"📋 {BOT_NAME} version: {BOT_VERSION}")
@@ -203,7 +202,6 @@ async def version(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def files(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send supported file types when the command /files is issued."""
     await update.message.reply_text(f"📄 Supported file types:\n{SUPPORTED_FILE_TYPES}")
-
 
 async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle document uploads with improved logging."""
@@ -312,6 +310,83 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
             os.remove(temp_file_path)
             logger.info(f"Cleaned up temporary file: {temp_file_path}")
 
+async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle photo uploads (when users send pictures as photos)."""
+    user_id = update.message.from_user.id
+    username = update.message.from_user.username or update.message.from_user.first_name
+    photo = update.message.photo[-1]
+    file_id = photo.file_id
+    file_name = f"photo_{file_id}.jpg"
+
+    logger.info(f"Processing photo upload from user {username} (ID: {user_id})")
+
+    # Check user permission
+    if not is_user_allowed(user_id):
+        logger.warning(f"Unauthorized photo upload attempt by user {username} (ID: {user_id})")
+        await update.message.reply_text("❌ You are not authorized to use this bot.")
+        return
+
+    temp_file_path = f"/tmp/{file_id}_{file_name}"
+
+    try:
+        logger.info(f"Downloading photo {file_name} from Telegram")
+        file = await context.bot.get_file(file_id)
+        await file.download_to_drive(temp_file_path)
+
+        if not os.path.exists(temp_file_path):
+            logger.error(f"Failed to download photo {file_name}")
+            await update.message.reply_text("❌ Failed to download photo.")
+            return
+
+        # Metadata
+        file_created_at, file_modified_at = get_image_metadata(temp_file_path)
+        file_size = os.path.getsize(temp_file_path)
+        device_asset_id = f"{file_name}-{file_size}"
+        checksum = calculate_sha1(temp_file_path)
+
+        with open(temp_file_path, 'rb') as f:
+            files = {'assetData': (file_name, f)}
+            data = {
+                'deviceAssetId': device_asset_id,
+                'deviceId': 'telegram-bot-device',
+                'fileCreatedAt': file_created_at,
+                'fileModifiedAt': file_modified_at,
+                'isFavorite': 'false',
+                'visibility': 'timeline'
+            }
+            headers = {
+                'x-api-key': IMMICH_API_KEY,
+                'x-immich-checksum': checksum
+            }
+
+            logger.info(f"Uploading photo {file_name} to Immich")
+            response = requests.post(
+                f"{IMMICH_API_URL}/assets",
+                headers=headers,
+                files=files,
+                data=data
+            )
+
+            if response.status_code in (200, 201):
+                response_data = response.json()
+                if response.status_code == 200 and response_data.get('status') == 'duplicate':
+                    logger.info(f"Photo {file_name} is a duplicate in Immich")
+                    await update.message.reply_text(f"ℹ️ Photo already exists in Immich.")
+                else:
+                    logger.info(f"Successfully uploaded photo {file_name} to Immich")
+                    await update.message.reply_text(f"✅ Photo uploaded successfully!")
+            else:
+                logger.error(f"Failed to upload photo {file_name} to Immich. Status code: {response.status_code}, Response: {response.text}")
+                await update.message.reply_text(f"❌ Failed to upload photo. Error: {response.text}")
+
+    except Exception as e:
+        logger.error(f"Error processing photo {file_name}: {str(e)}", exc_info=True)
+        await update.message.reply_text(f"❌ An error occurred: {str(e)}")
+    finally:
+        if os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+            logger.info(f"Cleaned up temporary photo file: {temp_file_path}")
+
 def main():
     """Start the bot with command handlers."""
     try:
@@ -330,6 +405,7 @@ def main():
         application.add_handler(CommandHandler("version", version))
         application.add_handler(CommandHandler("files", files))
         application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
+        application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
 
         try:
             loop = asyncio.get_event_loop()
